@@ -65,9 +65,9 @@ x_train = np.load("x_train.npy")
 y_train = np.load("y_train.npy")
 x_test = np.load("x_test.npy")
 
-# print(x_train.shape)
-# print(x_test.shape)
-# print(y_train.shape)
+print(x_train.shape)
+print(x_test.shape)
+print(y_train.shape)
 
 y_train_multi = np.empty(y_train.shape, dtype=y_train.dtype)
 y_train_multi[:, 4] = y_train[:, 4]
