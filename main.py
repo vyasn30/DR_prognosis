@@ -46,7 +46,7 @@ class Metrics(Callback):
 
         if _val_kappa == max(self.val_kappas):
             print("Validation Kappa has improved. Saving model.")
-            self.model.save('model.h5')
+            self.model.save('data/model.h5')
 
         return
 
@@ -61,9 +61,9 @@ def create_datagen():
     )
 
 
-x_train = np.load("x_train.npy")
-y_train = np.load("y_train.npy")
-x_test = np.load("x_test.npy")
+x_train = np.load("data/x_train.npy")
+y_train = np.load("data/y_train.npy")
+x_test = np.load("data/x_test.npy")
 
 # print(x_train.shape)
 # print(x_test.shape)
@@ -75,7 +75,7 @@ y_train_multi[:, 4] = y_train[:, 4]
 for i in range(3, -1, -1):
     y_train_multi[:, i] = np.logical_or(y_train[:, i], y_train_multi[:, i + 1])
 
-np.save("y_train_multi.npy", y_train_multi)
+np.save("data/y_train_multi.npy", y_train_multi)
 
 data_generator = create_datagen().flow(x_train, y_train, batch_size=BATCH_SIZE)
 
@@ -86,7 +86,7 @@ x_train, x_val, y_train, y_val = train_test_split(
 
 
 densenet = DenseNet121(
-    weights='DenseNet-BC-121-32-no-top.h5/DenseNet-BC-121-32-no-top.h5',
+    weights='data/DenseNet-BC-121-32-no-top.h5/DenseNet-BC-121-32-no-top.h5',
     include_top=False,
     input_shape=(224,224,3)
 )
