@@ -76,5 +76,5 @@ for class_id in sorted(train_y.unique()):
         image=cv2.addWeighted ( image,4, cv2.GaussianBlur( image , (0,0) , IMG_SIZE/10) ,-4 ,128) # the trick is to add this line
 
         plt.imshow(image, cmap='gray')
-        plt.show()
+        #plt.show()
         ax.set_title('Label: %d-%d-%s' % (class_id, idx, row['id_code']) )
