@@ -19,12 +19,25 @@ BATCH_SIZE = 32
 
 
 class Metrics(Callback):
+    """
+    This class is used to measure the performance of the model.
+    
+    """
+    
+    
     def __init__(self, val_data, batch_size=BATCH_SIZE):
+        """
+        Initialising the parameter: batch size
+        """
         super().__init__()
         self.validation_data = val_data
         self.batch_size = batch_size
 
     def on_train_begin(self, logs={}):
+        """ 
+        Initiate kappa scores
+        """
+        
         self.val_kappas = []
 
     def on_epoch_end(self, epoch, logs={}):
@@ -34,11 +47,14 @@ class Metrics(Callback):
         y_pred = self.model.predict(X_val) > 0.5
         y_pred = y_pred.astype(int).sum(axis=1) - 1
 
+       # Using cohen's kappa as a metric of accuracy is a good practice for unbalanced datasets
+        
         _val_kappa = cohen_kappa_score(
             y_val,
             y_pred,
             weights='quadratic'
         )
+        
 
         self.val_kappas.append(_val_kappa)
 
@@ -86,17 +102,21 @@ x_train, x_val, y_train, y_val = train_test_split(
 
 
 densenet = DenseNet121(
+    # Initialised the Densenet Weights
     weights='data/DenseNet-BC-121-32-no-top.h5/DenseNet-BC-121-32-no-top.h5',
-    include_top=False,
+    include_top=False, #Excluding the top layer because the features will be different for our use-case
     input_shape=(224,224,3)
 )
 
 def build_model():
+    # This is our model architechure 
+    
+    
     model = Sequential()
     model.add(densenet)
     model.add(layers.GlobalAveragePooling2D())
     model.add(layers.Dropout(0.5))
-    model.add(layers.Dense(5, activation='sigmoid'))
+    model.add(layers.Dense(5, activation='sigmoid')) #May use reLu, tanh or Leaky Relu
 
     model.compile(
         loss='binary_crossentropy',
