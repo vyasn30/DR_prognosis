@@ -11,6 +11,7 @@ IMG_SIZE = 512
 
 
 def crop_image_from_gray(img, tol=7):
+    # performs gray scale conversion, and performs round cropping
     if img.ndim == 2:
         mask = img > tol
         return img[np.ix_(mask.any(1), mask.any(0))]
@@ -33,10 +34,10 @@ def crop_image_from_gray(img, tol=7):
 
 def load_ben_color(path, sigmaX=10):
     image = cv2.imread(path)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    image = crop_image_from_gray(image)
-    image = cv2.resize(image, (IMG_SIZE, IMG_SIZE))
-    image = cv2.addWeighted(image, 4, cv2.GaussianBlur(image, (0, 0), sigmaX), -4, 128)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) #changing colorspace
+    image = crop_image_from_gray(image) 
+    image = cv2.resize(image, (IMG_SIZE, IMG_SIZE)) #resizing the imagae
+    image = cv2.addWeighted(image, 4, cv2.GaussianBlur(image, (0, 0), sigmaX), -4, 128)  #Weighted addition between the image and the filter
 
     return image
 
@@ -56,7 +57,7 @@ ctr = 0
 
 
 for id_code in tqdm(X_train):
-    # for training data
+    # applying changes for training data
 
     path = f"data/aptos2019-blindness-detection/train_images/" + str(id_code) + ".png"
     array = load_ben_color(path, sigmaX=30)
@@ -64,7 +65,7 @@ for id_code in tqdm(X_train):
     image.save("data/aptos2019-blindness-detection/processed/train images/" + str(id_code) + ".png")
 
 for id_code in tqdm(X_test):
-    # for training data
+    # applying chages for training data
 
     path = f"data/aptos2019-blindness-detection/train_images/" + str(id_code) + ".png"
     array = load_ben_color(path, sigmaX=30)
